@@ -1,0 +1,9 @@
+[submodule "extern/cxxopts"]
+	path = extern/cxxopts
+	url = https://github.com/jarro2783/cxxopts.git
+[submodule "extern/googletest"]
+	path = extern/googletest
+	url = https://github.com/google/googletest.git
+[submodule "extern/cmake_helpers"]
+	path = extern/cmake_helpers
+	url = https://github.com/kbrunham/cmake_helpers.git
