@@ -40,6 +40,11 @@ jobs:
       uses: actions/setup-python@v5.2.0
       with:
         python-version: '3.12'
+    - uses: lukka/get-cmake@v3.30.5
+      with:
+        cmakeVersion: "~3.25.0"
+        ninjaVersion: "^1.11.1"
+
     - name: Prepare Venv
       run: |
         make venv
