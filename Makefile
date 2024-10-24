@@ -34,8 +34,10 @@ VENV_PIP_INSTALL := $(VENV_PIP) install $(PIP_PROXY) --timeout 90
 VENV_PYTHON := $(VENV_DIR)/bin/python
 VENV_CLANG_FORMAT := $(VENV_DIR)/bin/clang-format
 
-BOOST_VERSION ?= 1.86.0
+BOOST_VERSION ?= 1.85.0
 BOOST_VERSION_MOD := $(subst .,_,$(BOOST_VERSION))
+BOOT_ROOTDIR ?= $(REPO_ROOT_DIR)/boost
+export BOOST_ROOTDIR
 
 ##############################################################################
 # Set default goal before any targets. The default goal here is "test"
