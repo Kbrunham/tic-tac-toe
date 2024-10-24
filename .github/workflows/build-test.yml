@@ -1,18 +1,18 @@
 on:
-    push:
-      branches:
-        - main
-    pull_request:
-      types: [opened, reopened, synchronize, ready_for_review]
+  push:
+    branches:
+    - main
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
 
-  defaults:
-    run:
-      shell: bash
+defaults:
+  run:
+    shell: bash
 
   # Ensure only one instance of the workflow is running for a given branch
-  concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
-    cancel-in-progress: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   clear-status:
