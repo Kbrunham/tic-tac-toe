@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/devcontainers/cpp:ubuntu-22.04
 ARG BOOST_VERSION=1.86.0
 
 # Add additional packages
-RUN apt update && apt install -y clang-format
+RUN apt update && apt install -y python3-venv clang-format
 
 # Set the locale
 RUN locale-gen en_US.UTF-8
