@@ -46,7 +46,6 @@ boost: |$(WORK_ROOT_DIR)
 	cd $(WORK_ROOT_DIR)/boost_$(BOOST_VERSION_MOD) && ./b2 install \
 		--with-filesystem \
 		--with-regex \
-		--with-serialization \
 		--build-type=minimal \
 		--link=static
 	rm -rf $(WORK_ROOT_DIR)/boost_$(BOOST_VERSION_MOD) $(WORK_ROOT_DIR)/boost_$(BOOST_VERSION_MOD).tar.bz2
