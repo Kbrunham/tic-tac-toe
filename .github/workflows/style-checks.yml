@@ -25,7 +25,7 @@ jobs:
       - name: Clear status
         uses: myrotvorets/set-commit-status-action@v2.0.1
         with:
-          name: style-check-status
+          context: style-check-status
           status: "pending"
           token: ${{ secrets.GH_TOKEN }}
 
@@ -59,6 +59,6 @@ jobs:
       - name: Update commit status
         uses: myrotvorets/set-commit-status-action@v2.0.1
         with:
-          name: style-check-status
+          context: style-check-status
           status: ${{ job.status }}
           token: ${{ secrets.GH_TOKEN }}
