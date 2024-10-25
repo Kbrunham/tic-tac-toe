@@ -82,7 +82,7 @@ dev-clean :
 	git clean -dfx --exclude=/.vscode --exclude=.lfsconfig
 
 .PHONY: prepare-tools
-prepare-tools : venv
+prepare-tools : venv boost
 
 ##############################################################################
 # Style checks

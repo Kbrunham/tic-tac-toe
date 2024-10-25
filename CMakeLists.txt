@@ -23,6 +23,10 @@ include(CTest)
 # Include 3rd party libraries from source tree
 
 # Add boost
+# Set default boost root as /boost in the project source directory
+if (NOT BOOST_ROOT)
+    set(BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost")
+endif ()
 find_package(Boost 1.86 REQUIRED)
 message(STATUS "Boost version: ${Boost_VERSION}")
 message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
