@@ -7,3 +7,6 @@
 [submodule "extern/cmake_helpers"]
 	path = extern/cmake_helpers
 	url = https://github.com/kbrunham/cmake_helpers.git
+[submodule "extern/plog"]
+	path = extern/plog
+	url = https://github.com/SergiusTheBest/plog.git
