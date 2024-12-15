@@ -91,7 +91,7 @@ prepare-tools : venv boost
 ##############################################################################
 # Style checks
 ##############################################################################
-CLANG_CHECK_FILES := $(shell git ls-files *.c* *.h)
+CLANG_CHECK_FILES := $(shell git ls-files *.c* *.h src/*.c* src/*.h)
 
 .PHONY: style-check-clang
 style-check-clang: |venv

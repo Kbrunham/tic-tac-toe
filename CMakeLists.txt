@@ -53,18 +53,28 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/extern/cxxopts" "extern/cxxopts" EXCLUDE
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/plog" "extern/plog" EXCLUDE_FROM_ALL)
 
 # Add source to this project's executable.
-add_executable(main "main.cpp" "main.h")
+add_executable(main)
 target_link_libraries(main Boost::headers)
 target_link_libraries(main cxxopts)
 target_link_libraries(main plog)
+target_include_directories(main PRIVATE "${PROJECT_SOURCE_DIR}/src")
+
+set(MAIN_TARGET_SOURCES
+        "main.cpp"
+        "src/game_board.cpp"
+        "src/game_env.cpp"
+        "src/game_move.cpp"
+)
+
+target_sources(main PRIVATE ${MAIN_TARGET_SOURCES})
 
 project_add_test(
         # Exe name
         main_test1
 
         # Source files. Semicolon separated
-        "test_main.cpp"
+        "test_main.cpp;src/game_board.cpp;src/game_env.cpp;src/game_move.cpp"
 
         # Libs. Space separated
-        Boost::headers
+        Boost::headers plog
 )
