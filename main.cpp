@@ -2,6 +2,10 @@
 //
 
 #include <cxxopts.hpp>
+#include <plog/Log.h>
+#include <plog/Init.h>
+#include <plog/Formatters/TxtFormatter.h>
+#include <plog/Appenders/ColorConsoleAppender.h>
 
 #include "main.h"
 
@@ -9,6 +13,10 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+    //static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
+    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
+    plog::init(plog::verbose, &consoleAppender);
+
     cxxopts::Options options("test", "A brief description");
 
     options.add_options()("d,debug", "Enable debugging", cxxopts::value<bool>()->default_value("false"))("h,help",
@@ -22,5 +30,8 @@ int main(int argc, char **argv)
     }
 
     cout << "Hello CMake." << endl;
+
+    PLOG_DEBUG << "Hello log!"; // long macro
+
     return 0;
 }

@@ -49,10 +49,14 @@ set(BUILD_SHARED_LIBS ${__TEMP_BUILD_SHARED_LIBS} CACHE BOOL "" FORCE)
 # Add cxxopts
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/cxxopts" "extern/cxxopts" EXCLUDE_FROM_ALL)
 
+# Add plog
+add_subdirectory("${PROJECT_SOURCE_DIR}/extern/plog" "extern/plog" EXCLUDE_FROM_ALL)
+
 # Add source to this project's executable.
 add_executable(main "main.cpp" "main.h")
 target_link_libraries(main Boost::headers)
 target_link_libraries(main cxxopts)
+target_link_libraries(main plog)
 
 project_add_test(
         # Exe name
