@@ -81,6 +81,10 @@ clean:
 dev-clean :
 	git clean -dfx --exclude=/.vscode --exclude=.lfsconfig
 
+.PHONY: dev-update
+dev-update:
+	git submodule update --init --recursive
+
 .PHONY: prepare-tools
 prepare-tools : venv boost
 
