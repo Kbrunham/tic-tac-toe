@@ -3,8 +3,6 @@
 
 #include <memory>
 
-#include <backtrace.h>
-
 #include <cxxopts.hpp>
 #include <plog/Appenders/ColorConsoleAppender.h>
 #include <plog/Formatters/TxtFormatter.h>

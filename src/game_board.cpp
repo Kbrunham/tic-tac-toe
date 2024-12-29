@@ -60,6 +60,7 @@ std::vector<std::unique_ptr<GAME_MOVE>> get_all_moves(GAME_PLAYER player)
     std::vector<std::unique_ptr<GAME_MOVE>> moves;
 
     std::unique_ptr<GAME_MOVE> move(new GAME_MOVE());
+    moves.push_back(std::move(move));
 
     return moves;
 }
