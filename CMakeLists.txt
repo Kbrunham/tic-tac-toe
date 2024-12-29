@@ -22,6 +22,11 @@ include(CTest)
 
 # Include 3rd party libraries from source tree
 
+# Add Backward
+set (Backward_DIR "${PROJECT_SOURCE_DIR}/extern/backward-cpp")
+find_package(Backward)
+message(STATUS "Backward include dir: ${BACKWARD_INCLUDE_DIRS}")
+
 # Add boost
 # Set default boost root as /boost in the project source directory
 if (NOT BOOST_ROOT)
@@ -54,12 +59,14 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/extern/plog" "extern/plog" EXCLUDE_FROM_
 
 # Add source to this project's executable.
 add_executable(main)
-target_link_libraries(main Boost::headers)
-target_link_libraries(main cxxopts)
-target_link_libraries(main plog)
 target_include_directories(main PRIVATE "${PROJECT_SOURCE_DIR}/src")
+target_link_libraries(main PUBLIC Backward::Backward)
+target_link_libraries(main PUBLIC Boost::headers)
+target_link_libraries(main PUBLIC cxxopts)
+target_link_libraries(main PUBLIC plog)
 
 set(MAIN_TARGET_SOURCES
+        "${PROJECT_SOURCE_DIR}/extern/backward-cpp/backward.cpp"
         "main.cpp"
         "src/game_board.cpp"
         "src/game_env.cpp"
@@ -75,6 +82,6 @@ project_add_test(
         # Source files. Semicolon separated
         "test_main.cpp;src/game_board.cpp;src/game_env.cpp;src/game_move.cpp"
 
-        # Libs. Space separated
-        Boost::headers plog
+        # Libs. Semicolon separated
+        "Boost::headers;plog"
 )

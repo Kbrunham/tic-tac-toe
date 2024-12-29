@@ -10,3 +10,6 @@
 [submodule "extern/plog"]
 	path = extern/plog
 	url = https://github.com/SergiusTheBest/plog.git
+[submodule "extern/backward-cpp"]
+	path = extern/backward-cpp
+	url = https://github.com/bombela/backward-cpp.git
