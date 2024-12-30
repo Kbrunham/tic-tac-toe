@@ -1,11 +1,11 @@
 // Include standard library headers
-#include <vector>
-#include <memory>
 #include <algorithm>
+#include <memory>
+#include <vector>
 
 // Include project headers
-#include <plog/Log.h>
 #include "game_move.h"
+#include <plog/Log.h>
 
 // Include this class header
 #include "game_board.h"
@@ -13,7 +13,6 @@
 // Forward declaration for functions
 std::vector<std::unique_ptr<GAME_MOVE>> get_all_moves(GAME_PLAYER player);
 void evaluate_move(GAME_MOVE* move);
-
 
 GAME_BOARD::GAME_BOARD()
 {
@@ -27,7 +26,7 @@ void GAME_BOARD::make_move(GAME_MOVE* move)
 {
 }
 
-GAME_MOVE* GAME_BOARD::get_best_move(GAME_PLAYER player)
+std::unique_ptr<GAME_MOVE> GAME_BOARD::get_best_move(GAME_PLAYER player)
 {
     std::vector<std::unique_ptr<GAME_MOVE>> moves;
 
@@ -43,8 +42,8 @@ GAME_MOVE* GAME_BOARD::get_best_move(GAME_PLAYER player)
 
     // Return the best move
     std::sort(moves.begin(), moves.end());
-
-    return moves[0].release();
+    std::unique_ptr<GAME_MOVE> best_move = std::move(moves.front());
+    return best_move;
 }
 
 bool GAME_BOARD::game_over()
@@ -59,13 +58,14 @@ std::vector<std::unique_ptr<GAME_MOVE>> get_all_moves(GAME_PLAYER player)
 {
     std::vector<std::unique_ptr<GAME_MOVE>> moves;
 
+    // Create all moves
     std::unique_ptr<GAME_MOVE> move(new GAME_MOVE());
     moves.push_back(std::move(move));
+    //
 
     return moves;
 }
 
 void evaluate_move(GAME_MOVE* move)
 {
-
 }

@@ -1,3 +1,6 @@
 # We'll use defaults from the Microsoft style
 BasedOnStyle: Microsoft
 PointerAlignment: Left
+IndentWidth: 4
+UseTab: Never
+TabWidth: 4

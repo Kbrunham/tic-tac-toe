@@ -2,6 +2,7 @@
 #define GAME_ENV_H
 
 // Includes
+#include <memory>
 
 // Foward declarations
 class GAME_BOARD;
@@ -21,14 +22,11 @@ class GAME_ENV
     void set_player(GAME_PLAYER player);
     GAME_PLAYER get_current_player();
     void switch_player();
-    GAME_BOARD* get_board()
-    {
-        return m_board;
-    }
+    GAME_BOARD* get_board();
 
   private:
     GAME_PLAYER m_current_player;
-    GAME_BOARD* m_board;
+    std::unique_ptr<GAME_BOARD> m_board;
 };
 
 #endif // GAME_ENV_H

@@ -24,12 +24,13 @@ int main(int argc, char** argv)
     // static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
     plog::init(plog::verbose, &consoleAppender);
 
+    PLOG_INFO << "Tic-Tac-Tow Game";
+
     // Create the Arguments parser
     cxxopts::Options options("test", "A brief description");
 
     options.add_options()("d,debug", "Enable debugging", cxxopts::value<bool>()->default_value("false"))("h,help",
                                                                                                          "Print usage");
-
     auto result = options.parse(argc, argv);
 
     if (result.count("help"))
@@ -38,9 +39,7 @@ int main(int argc, char** argv)
         exit(0);
     }
 
-    cout << "Hello CMake." << endl;
-
-    PLOG_DEBUG << "Hello log!"; // long macro
+    PLOG_INFO << "Starting Game";
 
     // Create the board environment
     GAME_ENV game_env;
@@ -48,16 +47,16 @@ int main(int argc, char** argv)
     // Set the starting player
     game_env.set_player(GAME_PLAYER::PLAYER_1);
 
-    // Start the game loop
+    // Shorthand variables
     GAME_BOARD* game_board = game_env.get_board();
+
+    // Start the game loop
     for (int game_round = 0; !game_board->game_over(); game_round++)
     {
-        std::unique_ptr<GAME_MOVE> game_move;
-
         PLOG_INFO << "Game Round: " << game_round;
 
         // Get the current player's move
-        game_move.reset(game_board->get_best_move(game_env.get_current_player()));
+        std::unique_ptr<GAME_MOVE> game_move = game_board->get_best_move(game_env.get_current_player());
 
         // Make the move
         game_board->make_move(game_move.get());

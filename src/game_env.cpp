@@ -3,12 +3,11 @@
 
 GAME_ENV::GAME_ENV() : m_current_player(GAME_PLAYER::PLAYER_1)
 {
-    m_board = new GAME_BOARD();
+    m_board = std::make_unique<GAME_BOARD>();
 }
 
 GAME_ENV::~GAME_ENV()
 {
-    delete m_board;
 }
 
 void GAME_ENV::set_player(GAME_PLAYER player)
@@ -24,4 +23,9 @@ GAME_PLAYER GAME_ENV::get_current_player()
 void GAME_ENV::switch_player()
 {
     m_current_player = (m_current_player == GAME_PLAYER::PLAYER_1) ? GAME_PLAYER::PLAYER_2 : GAME_PLAYER::PLAYER_1;
+}
+
+GAME_BOARD* GAME_ENV::get_board()
+{
+    return m_board.get();
 }
