@@ -11,7 +11,7 @@
 #include "game_board.h"
 
 // Forward declaration for functions
-std::vector<std::unique_ptr<GAME_MOVE>> get_all_moves(GAME_PLAYER player);
+std::vector<GAME_MOVE> get_all_moves(const GAME_PLAYER& player);
 void evaluate_move(GAME_MOVE* move);
 
 GAME_BOARD::GAME_BOARD()
@@ -22,31 +22,31 @@ GAME_BOARD::~GAME_BOARD()
 {
 }
 
-void GAME_BOARD::make_move(GAME_MOVE* move)
+void GAME_BOARD::make_move(const GAME_MOVE& move)
 {
 }
 
-std::unique_ptr<GAME_MOVE> GAME_BOARD::get_best_move(GAME_PLAYER player)
+GAME_MOVE GAME_BOARD::get_best_move(const GAME_PLAYER& player)
 {
-    std::vector<std::unique_ptr<GAME_MOVE>> moves;
+    std::vector<GAME_MOVE> all_moves;
 
     // Get all possible moves
-    moves = get_all_moves(player);
-    PLOG_DEBUG << "Generated " << moves.size() << " moves";
+    all_moves = get_all_moves(player);
+    PLOG_DEBUG << "Generated " << all_moves.size() << " moves";
 
-    // Evaluate all possible moves
-    for (auto& move : moves)
+    // Evaluate all possible moves. Each interation updates
+    // the score of the move
+    for (auto& cur_move : all_moves)
     {
-        evaluate_move(move.get());
+        evaluate_move(&cur_move);
     }
 
     // Return the best move
-    std::sort(moves.begin(), moves.end());
-    std::unique_ptr<GAME_MOVE> best_move = std::move(moves.front());
-    return best_move;
+    std::sort(all_moves.begin(), all_moves.end());
+    return all_moves.front();
 }
 
-bool GAME_BOARD::game_over()
+bool GAME_BOARD::game_over() const
 {
     static int count = 0;
     count++;
@@ -54,16 +54,17 @@ bool GAME_BOARD::game_over()
     return (count > 10);
 }
 
-std::vector<std::unique_ptr<GAME_MOVE>> get_all_moves(GAME_PLAYER player)
+std::vector<GAME_MOVE> get_all_moves(const GAME_PLAYER& player)
 {
-    std::vector<std::unique_ptr<GAME_MOVE>> moves;
+    std::vector<GAME_MOVE> all_moves;
 
     // Create all moves
-    std::unique_ptr<GAME_MOVE> move(new GAME_MOVE());
-    moves.push_back(std::move(move));
+    // Fake for now
+    GAME_MOVE cur_move;
+    all_moves.push_back(cur_move);
     //
 
-    return moves;
+    return all_moves;
 }
 
 void evaluate_move(GAME_MOVE* move)

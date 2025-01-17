@@ -10,8 +10,10 @@ class GAME_BOARD;
 // Player Enum
 enum class GAME_PLAYER
 {
-    PLAYER_1,
-    PLAYER_2
+    PLAYER_1 = 0,
+    PLAYER_2 = 1,
+
+    MAX_PLAYERS = 2
 };
 
 class GAME_ENV
