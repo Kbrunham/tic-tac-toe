@@ -61,7 +61,7 @@ venv:
 	$(VENV_PIP_INSTALL) -r requirements.txt
 
 boost: |$(WORK_ROOT_DIR)
-	cd $(WORK_ROOT_DIR) && wget https://boostorg.jfrog.io/artifactory/main/release/$(BOOST_VERSION)/source/boost_$(BOOST_VERSION_MOD).tar.bz2
+	cd $(WORK_ROOT_DIR) && wget https://archives.boost.io/release/$(BOOST_VERSION)/source/boost_$(BOOST_VERSION_MOD).tar.bz2
 	cd $(WORK_ROOT_DIR) && tar --bzip2 -xf boost_$(BOOST_VERSION_MOD).tar.bz2
 	cd $(WORK_ROOT_DIR)/boost_$(BOOST_VERSION_MOD) && ./bootstrap.sh --prefix=$(REPO_ROOT_DIR)/boost
 	cd $(WORK_ROOT_DIR)/boost_$(BOOST_VERSION_MOD) && ./b2 install \
