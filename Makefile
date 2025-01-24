@@ -81,13 +81,17 @@ clean:
 dev-clean :
 	git clean -dfx --exclude=/.vscode --exclude=.lfsconfig
 
+.PHONY: dev-update
+dev-update:
+	git submodule update --init --recursive
+
 .PHONY: prepare-tools
 prepare-tools : venv boost
 
 ##############################################################################
 # Style checks
 ##############################################################################
-CLANG_CHECK_FILES := $(shell git ls-files *.c* *.h)
+CLANG_CHECK_FILES := $(shell git ls-files *.c* *.h src/*.c* src/*.h)
 
 .PHONY: style-check-clang
 style-check-clang: |venv

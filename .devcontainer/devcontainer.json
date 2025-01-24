@@ -1,6 +1,5 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
-
 // If you are behind a proxy, set the http_proxy and https_proxy environment variables
 // in the container environment. For example:
 ///
@@ -10,13 +9,14 @@
 // 	"http_proxy": "http://proxy.corp.com:8080/",
 // 	"https_proxy": "http://proxy.corp.com:8080/"
 // },
-
 {
 	"name": "C++ Dev",
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-
+	"mounts": [
+		"type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly"
+	],
 	// Configure tool-specific properties.
 	"customizations": {
 		// Configure properties specific to VS Code.
