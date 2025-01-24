@@ -15,9 +15,21 @@ void GAME_ENV::set_player(GAME_PLAYER player)
     m_current_player = player;
 }
 
-GAME_PLAYER GAME_ENV::get_current_player()
+GAME_PLAYER GAME_ENV::get_current_player() const
 {
     return m_current_player;
+}
+
+const char* GAME_ENV::get_current_player_cstr() const
+{
+    if (m_current_player == GAME_PLAYER::PLAYER_1)
+    {
+        return "Player 1";
+    }
+    else
+    {
+        return "Player 2";
+    }
 }
 
 void GAME_ENV::switch_player()

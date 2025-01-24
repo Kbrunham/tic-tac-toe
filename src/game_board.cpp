@@ -3,27 +3,41 @@
 #include <memory>
 #include <vector>
 
-// Include project headers
-#include "game_move.h"
+// Include library headers
 #include <plog/Log.h>
+
+// Include project headers
+#include "cmn.h"
+#include "game_move.h"
 
 // Include this class header
 #include "game_board.h"
+
+using namespace GAME_BOARD_UTILS;
 
 // Forward declaration for functions
 std::vector<GAME_MOVE> get_all_moves(const GAME_PLAYER& player);
 void evaluate_move(GAME_MOVE* move);
 
+// Method defintions
+
 GAME_BOARD::GAME_BOARD()
 {
+    // Initialize the game board to a 0
+    m_player_moves[GAME_PLAYER::PLAYER_1].reset();
+    m_player_moves[GAME_PLAYER::PLAYER_2].reset();
 }
 
 GAME_BOARD::~GAME_BOARD()
 {
 }
 
-void GAME_BOARD::make_move(const GAME_MOVE& move)
+void GAME_BOARD::make_move(const GAME_MOVE& move, const GAME_PLAYER& player)
 {
+    int move_bit_index = game_x_y_to_bitset_index(move.get_move_x(), move.get_move_y());
+    CMN_ASSERT(m_player_moves[player].test(move_bit_index) == false);
+
+    m_player_moves[player].set(move_bit_index);
 }
 
 GAME_MOVE GAME_BOARD::get_best_move(const GAME_PLAYER& player)
@@ -46,27 +60,75 @@ GAME_MOVE GAME_BOARD::get_best_move(const GAME_PLAYER& player)
     return all_moves.front();
 }
 
-bool GAME_BOARD::game_over() const
-{
-    static int count = 0;
-    count++;
 
-    return (count > 10);
+GAME_MOVES_BITSET GAME_BOARD::get_combined_moves() const
+{
+    return get_combined_moves_bitset(m_player_moves.at(GAME_PLAYER::PLAYER_1), m_player_moves.at(GAME_PLAYER::PLAYER_2));
 }
 
-std::vector<GAME_MOVE> get_all_moves(const GAME_PLAYER& player)
+bool GAME_BOARD::game_over(const GAME_PLAYER& active_player) const
 {
-    std::vector<GAME_MOVE> all_moves;
+    const GAME_MOVES_BITSET combined_moves = get_combined_moves();
+    const GAME_MOVES_BITSET active_player_moves = m_player_moves.at(active_player);
 
-    // Create all moves
-    // Fake for now
-    GAME_MOVE cur_move;
-    all_moves.push_back(cur_move);
-    //
-
-    return all_moves;
+    return is_game_over(active_player_moves, combined_moves);
 }
 
-void evaluate_move(GAME_MOVE* move)
+bool GAME_BOARD::player_won(const GAME_PLAYER& active_player) const
 {
+    return is_player_won(m_player_moves.at(active_player));
+}
+
+std::vector<GAME_MOVE> GAME_BOARD::get_all_moves(const GAME_PLAYER& player) const
+{
+    std::vector<GAME_MOVE> all_available_moves;
+    GAME_MOVES_BITSET combined_moves = get_combined_moves();
+
+    for (int x = 0; x < BOARD_SIZE_X; x++)
+    {
+        for (int y = 0; y < BOARD_SIZE_Y; y++)
+        {
+            int bit_index = game_x_y_to_bitset_index(x, y);
+            if (combined_moves.test(bit_index) == false)
+            {
+                GAME_MOVE cur_move;
+                cur_move.set_move_x(x);
+                cur_move.set_move_y(y);
+                all_available_moves.push_back(cur_move);
+            }
+        }
+    }
+
+    PLOG_DEBUG << "Generated " << all_available_moves.size() << " moves";
+    CMN_ASSERT(all_available_moves.size() > 0);
+
+    return all_available_moves;
+}
+
+void GAME_BOARD::evaluate_move(GAME_MOVE* move)
+{
+}
+
+void GAME_BOARD::print_board() const
+{
+    for (int y = BOARD_SIZE_Y-1; y >= 0; y--)
+    {
+        for (int x = 0; x < BOARD_SIZE_X; x++)
+        {
+            int bit_index = game_x_y_to_bitset_index(x, y);
+            if (m_player_moves.at(GAME_PLAYER::PLAYER_1).test(bit_index))
+            {
+                std::cout << "X";
+            }
+            else if (m_player_moves.at(GAME_PLAYER::PLAYER_2).test(bit_index))
+            {
+                std::cout << "O";
+            }
+            else
+            {
+                std::cout << ".";
+            }
+        }
+        std::cout << std::endl;
+    }
 }

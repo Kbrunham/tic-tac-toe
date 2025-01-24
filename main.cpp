@@ -52,21 +52,30 @@ int main(int argc, char** argv)
 
     // Start the game loop.
     // Iterate until the game is over and switch player through every iteration
-    for (int game_round = 0; !game_board->game_over(); game_round++, game_env.switch_player())
+    for (int game_round = 0; !game_board->game_over(game_env.get_current_player()); game_round++, game_env.switch_player())
     {
         PLOG_INFO << "Game Round: " << game_round;
 
-        // TODO: Print game board
+        // Print game board
+        game_board->print_board();
 
         // TODO: Test if the player is a bot or not. For now assume box.
         // Get the current player's move
         GAME_MOVE game_move = game_board->get_best_move(game_env.get_current_player());
 
         // Make the move
-        game_board->make_move(game_move);
+        game_board->make_move(game_move, game_env.get_current_player());
     }
 
     PLOG_INFO << "Game Over!";
+    if (game_board->player_won(game_env.get_current_player()))
+    {
+        PLOG_INFO << "Player " << game_env.get_current_player_cstr() << " won!";
+    }
+    else
+    {
+        PLOG_INFO << "Game is a draw!";
+    }
 
     return 0;
 }

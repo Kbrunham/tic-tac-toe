@@ -67,21 +67,24 @@ target_link_libraries(main PUBLIC plog)
 
 set(MAIN_TARGET_SOURCES
         "${PROJECT_SOURCE_DIR}/extern/backward-cpp/backward.cpp"
-        "main.cpp"
         "src/game_board.cpp"
+        "src/game_board_utils.cpp"
         "src/game_env.cpp"
         "src/game_move.cpp"
 )
 
 target_sources(main PRIVATE ${MAIN_TARGET_SOURCES})
+target_sources(main PRIVATE "main.cpp")
 
 project_add_test(
         # Exe name
         main_test1
 
         # Source files. Semicolon separated
-        "test_main.cpp;src/game_board.cpp;src/game_env.cpp;src/game_move.cpp"
+        "test/test_game_board.cpp"
 
         # Libs. Semicolon separated
-        "Boost::headers;plog"
+        "Boost::headers;cxxopts;plog"
 )
+target_include_directories(main_test1 PRIVATE "${PROJECT_SOURCE_DIR}/src")
+target_sources(main_test1 PRIVATE ${MAIN_TARGET_SOURCES})
