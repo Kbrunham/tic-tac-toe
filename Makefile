@@ -120,7 +120,7 @@ clean:
 ##############################################################################
 # Style checks
 ##############################################################################
-CLANG_CHECK_FILES := $(shell git ls-files *.c* *.h src/*.c* src/*.h)
+CLANG_CHECK_FILES := $(shell git ls-files **/*.c **/*.h **/*.cpp)
 
 .PHONY: style-check-clang
 style-check-clang: |venv
