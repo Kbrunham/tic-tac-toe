@@ -60,10 +60,10 @@ GAME_MOVE GAME_BOARD::get_best_move(const GAME_PLAYER& player)
     return all_moves.front();
 }
 
-
 GAME_MOVES_BITSET GAME_BOARD::get_combined_moves() const
 {
-    return get_combined_moves_bitset(m_player_moves.at(GAME_PLAYER::PLAYER_1), m_player_moves.at(GAME_PLAYER::PLAYER_2));
+    return get_combined_moves_bitset(m_player_moves.at(GAME_PLAYER::PLAYER_1),
+                                     m_player_moves.at(GAME_PLAYER::PLAYER_2));
 }
 
 bool GAME_BOARD::game_over(const GAME_PLAYER& active_player) const
@@ -111,7 +111,7 @@ void GAME_BOARD::evaluate_move(GAME_MOVE* move)
 
 void GAME_BOARD::print_board() const
 {
-    for (int y = BOARD_SIZE_Y-1; y >= 0; y--)
+    for (int y = BOARD_SIZE_Y - 1; y >= 0; y--)
     {
         for (int x = 0; x < BOARD_SIZE_X; x++)
         {

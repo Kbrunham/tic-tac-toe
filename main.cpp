@@ -52,7 +52,8 @@ int main(int argc, char** argv)
 
     // Start the game loop.
     // Iterate until the game is over and switch player through every iteration
-    for (int game_round = 0; !game_board->game_over(game_env.get_current_player()); game_round++, game_env.switch_player())
+    for (int game_round = 0; !game_board->game_over(game_env.get_current_player());
+         game_round++, game_env.switch_player())
     {
         PLOG_INFO << "Game Round: " << game_round;
 

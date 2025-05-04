@@ -83,7 +83,7 @@ namespace GAME_BOARD_UTILS
 int game_x_y_to_bitset_index(int x, int y);
 
 GAME_MOVES_BITSET get_combined_moves_bitset(const GAME_MOVES_BITSET& player1_moves,
-                                                       const GAME_MOVES_BITSET& player2_moves);
+                                            const GAME_MOVES_BITSET& player2_moves);
 
 bool is_all_moves_made(const GAME_MOVES_BITSET& combined_moves);
 
