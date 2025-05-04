@@ -22,6 +22,7 @@ INFO_INDENT := $(SPACE)$(SPACE)$(SPACE)
 ##############################################################################
 REPO_ROOT_DIR := $(THIS_MK_DIR)
 WORK_ROOT_DIR := $(THIS_MK_DIR)/work
+WORK_BUILD_DIR := $(WORK_ROOT_DIR)/build
 
 VENV_DIR := $(REPO_ROOT_DIR)/venv
 VENV_PIP := $(VENV_DIR)/bin/pip
@@ -72,8 +73,8 @@ boost: |$(WORK_ROOT_DIR)
 	rm -rf $(WORK_ROOT_DIR)/boost_$(BOOST_VERSION_MOD) $(WORK_ROOT_DIR)/boost_$(BOOST_VERSION_MOD).tar.bz2
 
 
-.PHONY: clean
-clean:
+.PHONY: deep-clean
+deep-clean:
 	rm -rf venv $(WORK_ROOT_DIR)
 
 # Deep clean using git
@@ -100,11 +101,20 @@ prep: prepare-tools
 # Build
 ##############################################################################
 
-.PHONY: build
-build: | venv boost
+$(WORK_BUILD_DIR): | venv boost
 	cmake -B $(WORK_ROOT_DIR)/build -S . -G Ninja
-	cmake --build $(WORK_ROOT_DIR)/build
-	ctest --test-dir $(WORK_ROOT_DIR)/build
+
+.PHONY: build
+build: | $(WORK_BUILD_DIR)
+	cmake --build $(WORK_BUILD_DIR)
+
+.PHONY: test
+test: build
+	ctest --test-dir $(WORK_BUILD_DIR)
+
+.PHONY: clean
+clean:
+	rm -rf $(WORK_BUILD_DIR)
 
 
 ##############################################################################
