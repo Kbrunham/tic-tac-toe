@@ -100,15 +100,11 @@ prep: prepare-tools
 # Build
 ##############################################################################
 
-.PHONY: clean
-clean:
-	rm -rf build
-
 .PHONY: build
 build: | venv boost
-	cmake -B build -S . -G Ninja
-	cmake --build build
-	ctest --test-dir build
+	cmake -B $(WORK_ROOT_DIR)/build -S . -G Ninja
+	cmake --build $(WORK_ROOT_DIR)/build
+	ctest --test-dir $(WORK_ROOT_DIR)/build
 
 
 ##############################################################################
