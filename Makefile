@@ -86,14 +86,30 @@ dev-clean :
 	git clean -dfx extern/googletest
 	git clean -dfx extern/plog
 
-
-
 .PHONY: dev-update
 dev-update:
 	git submodule update --init --recursive
 
 .PHONY: prepare-tools
 prepare-tools : venv boost
+
+.PHONY: prep
+prep: prepare-tools
+
+##############################################################################
+# Build
+##############################################################################
+
+.PHONY: clean
+clean:
+	rm -rf build
+
+.PHONY: build
+build: | venv boost
+	cmake -B build -S . -G Ninja
+	cmake --build build
+	ctest --test-dir build
+
 
 ##############################################################################
 # Style checks
@@ -114,6 +130,6 @@ style-format-clang: |venv
 ###############################################################################
 .PHONY: help
 help:
-	$(info Build)
+	$(info Tic Tac Toe Build)
 	$(info ----------------)
 	$(info ALL Targets : all)
