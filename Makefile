@@ -80,6 +80,13 @@ clean:
 .PHONY: dev-clean
 dev-clean :
 	git clean -dfx --exclude=/.vscode --exclude=.lfsconfig
+	git clean -dfx extern/backward-cpp
+	git clean -dfx extern/cmake_helpers
+	git clean -dfx extern/cxxopts
+	git clean -dfx extern/googletest
+	git clean -dfx extern/plog
+
+
 
 .PHONY: dev-update
 dev-update:
