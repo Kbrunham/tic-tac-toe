@@ -80,6 +80,17 @@ clean:
 .PHONY: dev-clean
 dev-clean :
 	git clean -dfx --exclude=/.vscode --exclude=.lfsconfig
+	git clean -dfx extern/backward-cpp
+	git clean -dfx extern/cmake_helpers
+	git clean -dfx extern/cxxopts
+	git clean -dfx extern/googletest
+	git clean -dfx extern/plog
+
+
+
+.PHONY: dev-update
+dev-update:
+	git submodule update --init --recursive
 
 .PHONY: prepare-tools
 prepare-tools : venv boost
@@ -87,7 +98,7 @@ prepare-tools : venv boost
 ##############################################################################
 # Style checks
 ##############################################################################
-CLANG_CHECK_FILES := $(shell git ls-files *.c* *.h)
+CLANG_CHECK_FILES := $(shell git ls-files *.c* *.h src/*.c* src/*.h)
 
 .PHONY: style-check-clang
 style-check-clang: |venv

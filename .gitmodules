@@ -7,3 +7,9 @@
 [submodule "extern/cmake_helpers"]
 	path = extern/cmake_helpers
 	url = https://github.com/kbrunham/cmake_helpers.git
+[submodule "extern/plog"]
+	path = extern/plog
+	url = https://github.com/SergiusTheBest/plog.git
+[submodule "extern/backward-cpp"]
+	path = extern/backward-cpp
+	url = https://github.com/bombela/backward-cpp.git
