@@ -86,6 +86,7 @@ dev-clean :
 	git clean -dfx extern/cxxopts
 	git clean -dfx extern/googletest
 	git clean -dfx extern/plog
+	git clean -dfx extern/tabulate
 
 .PHONY: dev-update
 dev-update:
@@ -111,6 +112,11 @@ build: | $(WORK_BUILD_DIR)
 .PHONY: test
 test: build
 	ctest --test-dir $(WORK_BUILD_DIR)
+
+.PHONY: run
+run: build
+	$(WORK_BUILD_DIR)/main
+
 
 .PHONY: clean
 clean:
