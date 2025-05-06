@@ -5,6 +5,7 @@
 
 // Include library headers
 #include <plog/Log.h>
+#include <tabulate/table.hpp>
 
 // Include project headers
 #include "cmn.h"
@@ -111,24 +112,29 @@ void GAME_BOARD::evaluate_move(GAME_MOVE* move)
 
 void GAME_BOARD::print_board() const
 {
+    tabulate::Table table;
+
     for (int y = BOARD_SIZE_Y - 1; y >= 0; y--)
     {
+        tabulate::Table::Row_t row;
         for (int x = 0; x < BOARD_SIZE_X; x++)
         {
             int bit_index = game_x_y_to_bitset_index(x, y);
             if (m_player_moves.at(GAME_PLAYER::PLAYER_1).test(bit_index))
             {
-                std::cout << "X";
+                row.push_back("X");
             }
             else if (m_player_moves.at(GAME_PLAYER::PLAYER_2).test(bit_index))
             {
-                std::cout << "O";
+                row.push_back("O");
             }
             else
             {
-                std::cout << ".";
+                row.push_back("");
             }
         }
-        std::cout << std::endl;
+        table.add_row(row);
     }
+
+    std::cout << table << std::endl;
 }

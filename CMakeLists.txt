@@ -57,6 +57,9 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/extern/cxxopts" "extern/cxxopts" EXCLUDE
 # Add plog
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/plog" "extern/plog" EXCLUDE_FROM_ALL)
 
+# Add tabulate
+add_subdirectory("${PROJECT_SOURCE_DIR}/extern/tabulate" "extern/tabulate" EXCLUDE_FROM_ALL)
+
 # Add source to this project's executable.
 add_executable(main)
 target_include_directories(main PRIVATE "${PROJECT_SOURCE_DIR}/src")
@@ -64,6 +67,7 @@ target_link_libraries(main PUBLIC Backward::Backward)
 target_link_libraries(main PUBLIC Boost::headers)
 target_link_libraries(main PUBLIC cxxopts)
 target_link_libraries(main PUBLIC plog)
+target_link_libraries(main PUBLIC tabulate)
 
 set(MAIN_TARGET_SOURCES
         "${PROJECT_SOURCE_DIR}/extern/backward-cpp/backward.cpp"
@@ -84,7 +88,7 @@ project_add_test(
         "test/test_game_board.cpp"
 
         # Libs. Semicolon separated
-        "Boost::headers;cxxopts;plog"
+        "Boost::headers;cxxopts;plog;tabulate"
 )
 target_include_directories(main_test1 PRIVATE "${PROJECT_SOURCE_DIR}/src")
 target_sources(main_test1 PRIVATE ${MAIN_TARGET_SOURCES})
