@@ -1,6 +1,6 @@
 #include "game_move.h"
 
-GAME_MOVE::GAME_MOVE() : m_move_x(0), m_move_y(0)
+GAME_MOVE::GAME_MOVE() : m_move_x(0), m_move_y(0), m_score(0)
 {
 }
 

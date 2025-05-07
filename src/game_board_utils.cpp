@@ -98,3 +98,27 @@ bool GAME_BOARD_UTILS::is_player_won(const GAME_MOVES_BITSET& active_player_move
         return false;
     }
 }
+
+GAME_PLAYER GAME_BOARD_UTILS::get_next_player(const GAME_PLAYER& active_player)
+{
+    if (active_player == GAME_PLAYER::PLAYER_1)
+    {
+        return GAME_PLAYER::PLAYER_2;
+    }
+    else
+    {
+        return GAME_PLAYER::PLAYER_1;
+    }
+}
+
+const char* GAME_BOARD_UTILS::get_player_cstr(const GAME_PLAYER& player)
+{
+    if (player == GAME_PLAYER::PLAYER_1)
+    {
+        return "Player 1";
+    }
+    else
+    {
+        return "Player 2";
+    }
+}

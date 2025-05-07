@@ -2,6 +2,7 @@
 //
 
 #include <memory>
+#include <chrono>
 
 #include <cxxopts.hpp>
 #include <plog/Appenders/ColorConsoleAppender.h>
@@ -22,7 +23,7 @@ int main(int argc, char** argv)
     static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
     // Enable non-color logger
     // static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender;
-    plog::init(plog::verbose, &consoleAppender);
+    plog::init(plog::info, &consoleAppender);
 
     PLOG_INFO << "Tic-Tac-Tow Game";
 
@@ -37,6 +38,10 @@ int main(int argc, char** argv)
     {
         std::cout << options.help() << std::endl;
         exit(0);
+    }
+
+    if (result.count("debug")) {
+        plog::get()->setMaxSeverity(plog::debug);
     }
 
     PLOG_INFO << "Starting Game";
@@ -62,7 +67,11 @@ int main(int argc, char** argv)
 
         // TODO: Test if the player is a bot or not. For now assume box.
         // Get the current player's move
-        GAME_MOVE game_move = game_board->get_best_move(game_env.get_current_player());
+        auto start_time = std::chrono::high_resolution_clock::now();
+        GAME_MOVE game_move = game_board->get_best_move(game_env.get_current_player(), 0);
+        auto end_time = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed_time = end_time - start_time;
+        PLOG_INFO << "Computing best move took: " << elapsed_time.count() << " seconds";
 
         // Make the move
         game_board->make_move(game_move, game_env.get_current_player());

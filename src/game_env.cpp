@@ -1,9 +1,8 @@
 #include "game_env.h"
 #include "game_board.h"
 
-GAME_ENV::GAME_ENV() : m_current_player(GAME_PLAYER::PLAYER_1)
+GAME_ENV::GAME_ENV() : m_current_player(GAME_PLAYER::PLAYER_1), m_board(std::make_unique<GAME_BOARD>())
 {
-    m_board = std::make_unique<GAME_BOARD>();
 }
 
 GAME_ENV::~GAME_ENV()
@@ -22,19 +21,12 @@ GAME_PLAYER GAME_ENV::get_current_player() const
 
 const char* GAME_ENV::get_current_player_cstr() const
 {
-    if (m_current_player == GAME_PLAYER::PLAYER_1)
-    {
-        return "Player 1";
-    }
-    else
-    {
-        return "Player 2";
-    }
+    return GAME_BOARD_UTILS::get_player_cstr(m_current_player);
 }
 
 void GAME_ENV::switch_player()
 {
-    m_current_player = (m_current_player == GAME_PLAYER::PLAYER_1) ? GAME_PLAYER::PLAYER_2 : GAME_PLAYER::PLAYER_1;
+    m_current_player = GAME_BOARD_UTILS::get_next_player(m_current_player);
 }
 
 GAME_BOARD* GAME_ENV::get_board()

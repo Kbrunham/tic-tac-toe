@@ -31,6 +31,8 @@ class GAME_BOARD
      */
     GAME_BOARD();
 
+    GAME_BOARD(const GAME_BOARD&); // Copy constructor
+
     /**
      * @brief Destroys the GAME_BOARD object.
      */
@@ -48,9 +50,10 @@ class GAME_BOARD
      * @brief Gets the best move for a player.
      *
      * @param player The player for whom the best move is to be determined.
+     * @param depth The depth for the minimax algorithm.
      * @return The best move for the player.
      */
-    GAME_MOVE get_best_move(const GAME_PLAYER& player);
+    GAME_MOVE get_best_move(const GAME_PLAYER& player, int depth);
 
     /**
      * @brief Checks if the game is over.
@@ -74,11 +77,15 @@ class GAME_BOARD
 
     GAME_MOVES_BITSET get_combined_moves() const;
     std::vector<GAME_MOVE> get_all_moves(const GAME_PLAYER& player) const;
-    void evaluate_move(GAME_MOVE* move);
+    void evaluate_move(GAME_MOVE* move, const GAME_PLAYER& player, int depth = 0);
 };
 
 namespace GAME_BOARD_UTILS
 {
+
+GAME_PLAYER get_next_player(const GAME_PLAYER& active_player);
+
+const char* get_player_cstr(const GAME_PLAYER& player);
 
 int game_x_y_to_bitset_index(int x, int y);
 

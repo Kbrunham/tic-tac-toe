@@ -29,35 +29,48 @@ GAME_BOARD::GAME_BOARD()
     m_player_moves[GAME_PLAYER::PLAYER_2].reset();
 }
 
+GAME_BOARD::GAME_BOARD(const GAME_BOARD& obj)
+{
+    // Copy constructor
+    m_player_moves[GAME_PLAYER::PLAYER_1] = obj.m_player_moves.at(GAME_PLAYER::PLAYER_1);
+    m_player_moves[GAME_PLAYER::PLAYER_2] = obj.m_player_moves.at(GAME_PLAYER::PLAYER_2);
+}
+
 GAME_BOARD::~GAME_BOARD()
 {
 }
 
 void GAME_BOARD::make_move(const GAME_MOVE& move, const GAME_PLAYER& player)
 {
+    PLOG_DEBUG << "Making move for " << GAME_BOARD_UTILS::get_player_cstr(player) << ": " << move.get_move_x() << ", "
+               << move.get_move_y();
     int move_bit_index = game_x_y_to_bitset_index(move.get_move_x(), move.get_move_y());
     CMN_ASSERT(m_player_moves[player].test(move_bit_index) == false);
 
     m_player_moves[player].set(move_bit_index);
 }
 
-GAME_MOVE GAME_BOARD::get_best_move(const GAME_PLAYER& player)
+GAME_MOVE GAME_BOARD::get_best_move(const GAME_PLAYER& player, int depth)
 {
     std::vector<GAME_MOVE> all_moves;
 
     // Get all possible moves
     all_moves = get_all_moves(player);
-    PLOG_DEBUG << "Generated " << all_moves.size() << " moves";
+    CMN_ASSERT(all_moves.size() > 0);
+    PLOG_DEBUG << "Generated " << all_moves.size() << " moves at depth " << depth;
 
     // Evaluate all possible moves. Each interation updates
     // the score of the move
     for (auto& cur_move : all_moves)
     {
-        evaluate_move(&cur_move);
+        evaluate_move(&cur_move, player, depth);
     }
 
     // Return the best move
     std::sort(all_moves.begin(), all_moves.end());
+    PLOG_DEBUG << "Best move for " << GAME_BOARD_UTILS::get_player_cstr(player) << " at depth " << depth << " : "
+               << all_moves.front().get_move_x() << ", " << all_moves.front().get_move_y()
+               << " with score: " << all_moves.front().get_score();
     return all_moves.front();
 }
 
@@ -106,8 +119,31 @@ std::vector<GAME_MOVE> GAME_BOARD::get_all_moves(const GAME_PLAYER& player) cons
     return all_available_moves;
 }
 
-void GAME_BOARD::evaluate_move(GAME_MOVE* move)
+void GAME_BOARD::evaluate_move(GAME_MOVE* move, const GAME_PLAYER& player, int depth)
 {
+    // Create a copy of the current game board
+    GAME_BOARD cur_move_board = *this;
+
+    // Make the move on the copy
+    cur_move_board.make_move(*move, player);
+    if (cur_move_board.game_over(player))
+    {
+        // If the game is over, set the score
+        if (cur_move_board.player_won(player))
+        {
+            move->set_score(1);
+        }
+        else
+        {
+            move->set_score(0);
+        }
+    }
+    else
+    {
+        // If the game is not over, get the next player and evaluate the move
+        GAME_PLAYER next_player = get_next_player(player);
+        move->set_score(-1 * cur_move_board.get_best_move(next_player, depth + 1).get_score());
+    }
 }
 
 void GAME_BOARD::print_board() const
@@ -130,7 +166,7 @@ void GAME_BOARD::print_board() const
             }
             else
             {
-                row.push_back("");
+                row.push_back(" ");
             }
         }
         table.add_row(row);
