@@ -19,6 +19,7 @@ class GAME_ENV
     const char* get_current_player_cstr() const;
     void switch_player();
     GAME_BOARD* get_board();
+    bool is_current_player_human() const;
 
   private:
     GAME_PLAYER m_current_player;
