@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <chrono>
+#include <iomanip>
 
 #include <cxxopts.hpp>
 #include <plog/Appenders/ColorConsoleAppender.h>
@@ -67,36 +68,22 @@ int main(int argc, char** argv)
 
         if (game_env.is_current_player_human())
         {
-            std::string user_input;
+            // Current player is human
             GAME_MOVE user_move;
 
-            // Get the move from the user
-            std::cout << "Enter your move (x y): ";
-            std::cin >> user_input;
-
-            // Split the input on the comma
-            std::stringstream ss(user_input);
-            std::string x_str, y_str;
-            if (!std::getline(ss, x_str, ',') || !std::getline(ss, y_str)) {
-                throw std::invalid_argument("Invalid input format. Expected x,y.");
-            }
-
-            // Convert the strings to integers
-            int x = std::stoi(x_str);
-            int y = std::stoi(y_str);
-
-            user_move.set_move_x(x);
-            user_move.set_move_y(y);
+            user_move = GAME_BOARD_UTILS::get_human_move(game_env.get_current_player());
 
             game_board->make_move(user_move, game_env.get_current_player());
         }
         else {
-            // Get the current player's move
+            // Current player is AI
+            PLOG_INFO << "AI is making a move...";
+            // Measure the time taken to compute the best move
             auto start_time = std::chrono::high_resolution_clock::now();
             GAME_MOVE game_move = game_board->get_best_move(game_env.get_current_player(), 0);
             auto end_time = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> elapsed_time = end_time - start_time;
-            PLOG_INFO << "Computing best move took: " << elapsed_time.count() << " seconds";
+            PLOG_INFO << "Computing best move took: " << std::fixed << std::setprecision(6) << elapsed_time.count()*1000 << " ms";
 
             // Make the move
             game_board->make_move(game_move, game_env.get_current_player());

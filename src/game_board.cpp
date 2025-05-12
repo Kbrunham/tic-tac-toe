@@ -61,11 +61,23 @@ GAME_MOVE GAME_BOARD::get_best_move(const GAME_PLAYER& player, int depth)
 
     // Evaluate all possible moves. Each interation updates
     // the score of the move
+    // Only look for moves that win
+    bool found_winning_move = false;
     for (auto& cur_move : all_moves)
     {
-        evaluate_move(&cur_move, player, depth);
+        found_winning_move |= evaluate_move(&cur_move, player, depth, true);
     }
 
+    if (!found_winning_move)
+    {
+        // If no winning move is found, evaluate all moves
+        for (auto& cur_move : all_moves)
+        {
+            evaluate_move(&cur_move, player, depth);
+        }
+    }
+
+    // Sort the moves based on score
     // Return the best move
     std::sort(all_moves.begin(), all_moves.end());
     PLOG_DEBUG << "Best move for " << GAME_BOARD_UTILS::get_player_cstr(player) << " at depth " << depth << " : "
@@ -119,31 +131,47 @@ std::vector<GAME_MOVE> GAME_BOARD::get_all_moves(const GAME_PLAYER& player) cons
     return all_available_moves;
 }
 
-void GAME_BOARD::evaluate_move(GAME_MOVE* move, const GAME_PLAYER& player, int depth)
+bool GAME_BOARD::evaluate_move(GAME_MOVE* move, const GAME_PLAYER& player, int depth, bool no_recurse)
 {
-    // Create a copy of the current game board
-    GAME_BOARD cur_move_board = *this;
+    if (move->is_move_evaluated())
+    {
+        // If the move is already evaluated, return
+        return move->get_score() == 1;
+    }
+    else {
+        // Create a copy of the current game board
+        GAME_BOARD cur_move_board = *this;
 
-    // Make the move on the copy
-    cur_move_board.make_move(*move, player);
-    if (cur_move_board.game_over(player))
-    {
-        // If the game is over, set the score
-        if (cur_move_board.player_won(player))
+        // Initialize the move score to -1
+        move->set_score(-1);
+        move->set_move_evaluated(false);
+
+        // Make the move on the copy
+        cur_move_board.make_move(*move, player);
+        if (cur_move_board.game_over(player))
         {
-            move->set_score(1);
+            // If the game is over, set the score
+            if (cur_move_board.player_won(player))
+            {
+                move->set_score(1);
+                move->set_move_evaluated(true);
+            }
+            else
+            {
+                move->set_score(0);
+                move->set_move_evaluated(true);
+            }
         }
-        else
+        else if (!no_recurse)
         {
-            move->set_score(0);
+            // If the game is not over, get the next player and evaluate the move
+            GAME_PLAYER next_player = get_next_player(player);
+            move->set_score(-1 * cur_move_board.get_best_move(next_player, depth + 1).get_score());
+            move->set_move_evaluated(true);
         }
     }
-    else
-    {
-        // If the game is not over, get the next player and evaluate the move
-        GAME_PLAYER next_player = get_next_player(player);
-        move->set_score(-1 * cur_move_board.get_best_move(next_player, depth + 1).get_score());
-    }
+
+    return move->get_score() == 1;
 }
 
 void GAME_BOARD::print_board() const
@@ -173,4 +201,31 @@ void GAME_BOARD::print_board() const
     }
 
     std::cout << table << std::endl;
+}
+
+GAME_MOVE GAME_BOARD_UTILS::get_human_move(const GAME_PLAYER& player)
+{
+    std::string user_input;
+    GAME_MOVE user_move;
+
+    // Get the move from the user
+    std::cout << "Enter your move (x y): ";
+    std::cin >> user_input;
+
+    // Split the input on the comma
+    std::stringstream ss(user_input);
+    std::string x_str, y_str;
+    if (!std::getline(ss, x_str, ',') || !std::getline(ss, y_str))
+    {
+        throw std::invalid_argument("Invalid input format. Expected x,y.");
+    }
+
+    // Convert the strings to integers
+    int x = std::stoi(x_str);
+    int y = std::stoi(y_str);
+
+    user_move.set_move_x(x);
+    user_move.set_move_y(y);
+
+    return user_move;
 }

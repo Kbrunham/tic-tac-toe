@@ -33,9 +33,18 @@ class GAME_MOVE
     {
         m_move_y = y;
     }
+    bool is_move_evaluated() const
+    {
+        return m_move_evaluated;
+    }
+    void set_move_evaluated(bool evaluated)
+    {
+        m_move_evaluated = evaluated;
+    }
 
   private:
     int m_score;
     int m_move_x;
     int m_move_y;
+    bool m_move_evaluated;
 };

@@ -36,5 +36,6 @@ GAME_BOARD* GAME_ENV::get_board()
 
 bool GAME_ENV::is_current_player_human() const
 {
-    return m_current_player == GAME_PLAYER::PLAYER_2;
+    return false;
+    //return m_current_player == GAME_PLAYER::PLAYER_2;
 }

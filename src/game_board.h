@@ -77,7 +77,7 @@ class GAME_BOARD
 
     GAME_MOVES_BITSET get_combined_moves() const;
     std::vector<GAME_MOVE> get_all_moves(const GAME_PLAYER& player) const;
-    void evaluate_move(GAME_MOVE* move, const GAME_PLAYER& player, int depth = 0);
+    bool evaluate_move(GAME_MOVE* move, const GAME_PLAYER& player, int depth = 0, bool no_recurse = false);
 };
 
 namespace GAME_BOARD_UTILS
@@ -105,5 +105,7 @@ bool is_right_to_left_diagional_win(const GAME_MOVES_BITSET& player_moves);
 bool is_game_over(const GAME_MOVES_BITSET& active_player_moves, const GAME_MOVES_BITSET& combined_moves);
 
 bool is_player_won(const GAME_MOVES_BITSET& active_player_moves);
+
+GAME_MOVE get_human_move(const GAME_PLAYER& player);
 
 } // namespace GAME_BOARD_UTILS
