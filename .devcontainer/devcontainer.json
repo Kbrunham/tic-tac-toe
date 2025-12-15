@@ -22,6 +22,10 @@
 		"type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly",
 		"type=bind,source=${localEnv:HOME}/bin,target=/home/vscode/bin,readonly"
 	],
+	"containerEnv": {
+		"http_proxy": "${localEnv:http_proxy}",
+		"https_proxy": "${localEnv:https_proxy}"
+	},
 	"remoteEnv": {
 		"PATH": "${containerEnv:PATH}:/home/vscode/bin"
 	},
