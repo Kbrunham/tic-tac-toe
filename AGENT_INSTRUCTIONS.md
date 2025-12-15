@@ -1,4 +1,4 @@
-# Agent Instructions
+make# Agent Instructions
 
 Purpose: This file guides automation agents (CI, bots, local assistants) interacting with this repository to operate safely and consistently.
 
