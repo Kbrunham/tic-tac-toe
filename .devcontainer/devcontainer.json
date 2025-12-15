@@ -12,11 +12,19 @@
 {
 	"name": "C++ Dev",
 	"build": {
-		"dockerfile": "Dockerfile"
+		"dockerfile": "Dockerfile",
+		"args": {
+			"http_proxy": "${localEnv:http_proxy}",
+			"https_proxy": "${localEnv:https_proxy}"
+		}
 	},
 	"mounts": [
-		"type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly"
+		"type=bind,source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly",
+		"type=bind,source=${localEnv:HOME}/bin,target=/home/vscode/bin,readonly"
 	],
+	"remoteEnv": {
+		"PATH": "${containerEnv:PATH}:/home/vscode/bin"
+	},
 	// Configure tool-specific properties.
 	"customizations": {
 		// Configure properties specific to VS Code.
@@ -31,3 +39,4 @@
 		}
 	}
 }
+
