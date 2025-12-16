@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   clear-status:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Clear status
         uses: myrotvorets/set-commit-status-action@v2.0.1
@@ -29,7 +29,7 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
 
   clang-format:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [clear-status]
     steps:
     - name: Checkout
@@ -50,7 +50,7 @@ jobs:
 
   post-status:
     name: Post Status
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [clear-status, clang-format]
     if: always()
     steps:
