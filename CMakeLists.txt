@@ -20,6 +20,11 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Enable testing
 include(CTest)
 
+# Adopt modern find_package behavior for *_ROOT variables (CMP0144)
+if(POLICY CMP0144)
+        cmake_policy(SET CMP0144 NEW)
+endif()
+
 # Include 3rd party libraries from source tree
 
 # Add Backward
@@ -28,10 +33,11 @@ find_package(Backward)
 message(STATUS "Backward include dir: ${BACKWARD_INCLUDE_DIRS}")
 
 # Add boost
-# Set default boost root as /boost in the project source directory
-if (NOT BOOST_ROOT)
-    set(BOOST_ROOT "${PROJECT_SOURCE_DIR}/boost")
+# Set default boost root as /boost in the project source directory (modern var)
+if (NOT Boost_ROOT)
+        set(Boost_ROOT "${PROJECT_SOURCE_DIR}/boost")
 endif ()
+list(APPEND CMAKE_PREFIX_PATH "${Boost_ROOT}")
 find_package(Boost 1.86 REQUIRED)
 message(STATUS "Boost version: ${Boost_VERSION}")
 message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")

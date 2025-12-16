@@ -30,14 +30,16 @@ PIP_PROXY := --proxy $(https_proxy)
 else
 PIP_PROXY :=
 endif
-VENV_PIP_INSTALL := $(VENV_PIP) install $(PIP_PROXY) --timeout 90
+VENV_PIP_INSTALL := $(VENV_PIP) install $(PIP_PROXY) --no-cache-dir --timeout 120 --retries 20 --trusted-host pypi.org --trusted-host files.pythonhosted.org
 VENV_PYTHON := $(VENV_DIR)/bin/python
 VENV_CLANG_FORMAT := $(VENV_DIR)/bin/clang-format
 
-BOOST_VERSION ?= 1.86.0
+BOOST_VERSION ?= 1.90.0
 BOOST_VERSION_MOD := $(subst .,_,$(BOOST_VERSION))
-BOOT_ROOTDIR ?= $(REPO_ROOT_DIR)/boost
+BOOST_ROOTDIR ?= $(REPO_ROOT_DIR)/boost
 export BOOST_ROOTDIR
+Boost_ROOTDIR ?= $(REPO_ROOT_DIR)/boost
+export Boost_ROOTDIR
 
 ##############################################################################
 # Set default goal before any targets. The default goal here is "test"
@@ -72,9 +74,13 @@ boost: |$(WORK_ROOT_DIR)
 	rm -rf $(WORK_ROOT_DIR)/boost_$(BOOST_VERSION_MOD) $(WORK_ROOT_DIR)/boost_$(BOOST_VERSION_MOD).tar.bz2
 
 
+.PHONY: deep-clean
+deep-clean: clean
+	rm -rf venv $(WORK_ROOT_DIR)
+
 .PHONY: clean
 clean:
-	rm -rf venv $(WORK_ROOT_DIR)
+	rm -rf build
 
 # Deep clean using git
 .PHONY: dev-clean
@@ -85,8 +91,6 @@ dev-clean :
 	git clean -dfx extern/cxxopts
 	git clean -dfx extern/googletest
 	git clean -dfx extern/plog
-
-
 
 .PHONY: dev-update
 dev-update:
@@ -109,6 +113,21 @@ style-format-clang: |venv
 	$(VENV_CLANG_FORMAT) -style=file -i $(CLANG_CHECK_FILES)
 
 
+##############################################################################
+# Style checks
+##############################################################################
+
+build/main: | prepare-tools
+	cmake -B build -S . -G Ninja
+	cmake --build build
+
+.PHONY: build
+build: build/main
+
+.PHONY: test
+test: build
+	ctest --test-dir build
+
 ###############################################################################
 #                                HELP
 ###############################################################################
@@ -117,3 +136,8 @@ help:
 	$(info Build)
 	$(info ----------------)
 	$(info ALL Targets : all)
+	$(info prepare-tools : Prepare development tools (virtualenv, boost))
+	$(info clean         : Clean all build artifacts)
+	$(info dev-clean     : Deep clean using git)
+	$(info dev-update    : Update git submodules)
+	$(info )
