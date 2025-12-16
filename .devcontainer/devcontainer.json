@@ -3,12 +3,6 @@
 // If you are behind a proxy, set the http_proxy and https_proxy environment variables
 // in the container environment. For example:
 ///
-// "containerEnv": {
-// 	"HTTP_PROXY": "http://proxy.corp.com:8080/",
-// 	"HTTPS_PROXY": "http://proxy.corp.com:8080/",
-// 	"http_proxy": "http://proxy.corp.com:8080/",
-// 	"https_proxy": "http://proxy.corp.com:8080/"
-// },
 {
 	"name": "C++ Dev",
 	"build": {
