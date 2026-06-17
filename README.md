@@ -83,7 +83,7 @@ make dev-clean
 - **Run:** `./work/build/main`
 
 ### Notes
-- **Boost:** `make boost` (via `make prepare-tools`) builds minimal Boost 1.86 into `boost/`. CMake locates Boost via `BOOST_ROOT`, which defaults to `./boost` in `CMakeLists.txt`. CI sets `BOOST_ROOT` explicitly; the Makefile exports `BOOST_ROOTDIR` for Make-driven workflows. If you have a system Boost 1.86 install, skip `make boost` and point `BOOST_ROOT` at it.
+- **Boost:** `make boost` (via `make prepare-tools`) builds minimal Boost 1.91 into `boost/`. CMake locates Boost via `BOOST_ROOT`, which defaults to `./boost` in `CMakeLists.txt`. CI sets `BOOST_ROOT` explicitly; the Makefile exports `BOOST_ROOTDIR` for Make-driven workflows. If you have a system Boost 1.91 install, skip `make boost` and point `BOOST_ROOT` at it.
 - **Artifacts:** All CMake outputs are placed under `work/build/`. Executables like the game (`main`) and test runner (`main_test1`) appear in that tree.
 - **Help:** See available Make targets via `make help`.
 

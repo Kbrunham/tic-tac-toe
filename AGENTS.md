@@ -18,7 +18,7 @@ C++17 tic-tac-toe game and solver built on the [cpp-devenv](https://github.com/k
 Follow [README.md — Build System](README.md#build-system) for the full workflow. Minimum steps:
 
 1. `make dev-update` — initialize submodules
-2. `make prepare-tools` — Python venv + local Boost 1.86
+2. `make prepare-tools` — Python venv + local Boost 1.91
 3. Configure, build, and test under `work/build/` (see README Quick Start)
 
 Executables: `./work/build/main` (game), `./work/build/main_test1` (tests).
@@ -44,7 +44,7 @@ Formatting uses `.clang-format` (Microsoft-based style). Run `make style-check-c
 ## Dependencies
 
 - **C++17** (required)
-- **Boost 1.86** — filesystem and regex, static link; built locally or via `BOOST_ROOT`
+- **Boost 1.91** — filesystem and regex, static link; built locally or via `BOOST_ROOT`
 - **Submodules** — GoogleTest, cxxopts, plog, backward-cpp, cmake_helpers
 
 ## Planned work

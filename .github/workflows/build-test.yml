@@ -14,7 +14,7 @@ defaults:
     shell: bash
 
 env:
-    BOOST_VERSION: 1.86.0
+    BOOST_VERSION: 1.91.0
     BOOST_ROOT: ${{ github.workspace }}/boost
 
 # Ensure only one instance of the workflow is running for a given branch
