@@ -39,7 +39,7 @@ jobs:
     needs: [clear-status]
     steps:
     - name: Checkout
-      uses: actions/checkout@v6.0.2
+      uses: actions/checkout@v6.0.3
       with:
         submodules: 'recursive'
 
