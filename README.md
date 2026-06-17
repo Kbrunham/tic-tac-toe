@@ -2,6 +2,18 @@
 
 Example Tic Tac Toe solver based on cpp-devenv template and using GitHub Actions.
 
+A dev container configuration is available in `.devcontainer/` (Ubuntu 24.04 C++). After opening the repo in the container, follow the build steps below.
+
+## Project overview
+
+C++17 command-line tic-tac-toe game and move solver.
+
+- **`GAME_BOARD`** — board state and rules; tracks each player's moves in bitsets and exposes `make_move()`, `get_best_move()`, and win/draw detection.
+- **`GAME_MOVE`** — a single board position (x, y).
+- **`GAME_ENV`** — game session state: current player and turn switching.
+- **`main.cpp`** — CLI entry point; runs a game loop that currently plays bot-vs-bot by calling `get_best_move()` each turn (see [TODO.md](TODO.md)).
+- **`test/test_game_board.cpp`** — GoogleTest unit tests for board utilities and game logic.
+
 ## Build System
 
 - **Overview:** The repository uses a thin `Makefile` to prepare tooling and dependencies, and hands off actual compilation and testing to CMake. You can either drive everything with the Make targets or run CMake directly.
@@ -10,14 +22,22 @@ Example Tic Tac Toe solver based on cpp-devenv template and using GitHub Actions
 - Get going fast with the common local flow:
 
 ```bash
+make dev-update
 make prepare-tools
-cmake -S . -B work/build
+cmake -S . -B work/build -G Ninja
 cmake --build work/build
 ctest --test-dir work/build --output-on-failure
 make style-check-clang
+./work/build/main
 ```
 
 ### Using Make (recommended)
+- **Submodules:** initialize git submodules (required on first clone).
+
+```bash
+make dev-update
+```
+
 - **Prepare tools:** sets up a Python venv, installs required Python packages, and builds a minimal local Boost.
 
 ```bash
@@ -27,7 +47,7 @@ make prepare-tools
 - **Configure CMake:** generates the build system under `work/build/`.
 
 ```bash
-cmake -S . -B work/build
+cmake -S . -B work/build -G Ninja
 ```
 
 - **Build:** compiles the project via the CMake-generated build files.
@@ -57,13 +77,14 @@ make dev-clean
 ```
 
 ### Using CMake directly
-- **Configure:** `cmake -S . -B work/build`
+- **Configure:** `cmake -S . -B work/build -G Ninja`
 - **Build:** `cmake --build work/build`
 - **Test:** `ctest --test-dir work/build --output-on-failure`
+- **Run:** `./work/build/main`
 
 ### Notes
-- **Boost:** The `prepare-tools` target builds a minimal Boost into `boost/` and exports `BOOST_ROOTDIR` for CMake to find headers/libs. If you have system Boost installed, you can skip `make boost` and let CMake find your system installation.
-- **Artifacts:** All CMake outputs are placed under `work/build/`. Executables like the game and test runners appear in that tree.
+- **Boost:** `make boost` (via `make prepare-tools`) builds minimal Boost 1.86 into `boost/`. CMake locates Boost via `BOOST_ROOT`, which defaults to `./boost` in `CMakeLists.txt`. CI sets `BOOST_ROOT` explicitly; the Makefile exports `BOOST_ROOTDIR` for Make-driven workflows. If you have a system Boost 1.86 install, skip `make boost` and point `BOOST_ROOT` at it.
+- **Artifacts:** All CMake outputs are placed under `work/build/`. Executables like the game (`main`) and test runner (`main_test1`) appear in that tree.
 - **Help:** See available Make targets via `make help`.
 
 ## CI/CD
@@ -83,4 +104,10 @@ make dev-clean
 - **Conventions:** Both workflows enforce single-run per ref via `concurrency` to cancel in-progress duplicates. They use the repository-local `boost/` directory with `BOOST_ROOT` set so builds are reproducible.
 
 - **Local parity:** The local commands in the Build System section mirror CI steps: configure, build, test, and style checks. If local `make style-check-clang` fails due to `clang-format` availability, re-create the venv (`rm -rf venv && make venv`) to ensure `requirements.txt` is applied.
+
+## Related docs
+
+- [AGENTS.md](AGENTS.md) — agent and contributor operating instructions (conventions, troubleshooting).
+- [TODO.md](TODO.md) — tracked TODO items in the codebase.
+- [LICENSE](LICENSE) — MIT License.
 
